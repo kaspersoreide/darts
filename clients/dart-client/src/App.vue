@@ -39,6 +39,8 @@
 
     <v-main>
       <Dart />
+      <ActiveGame/>
+      <NewGame/>
     </v-main>
   </v-app>
 </template>
@@ -46,12 +48,14 @@
 <script lang="ts">
 import Vue from 'vue';
 import Dart from './components/Dart.vue';
+import ActiveGame from './components/ActiveGame.vue';
+import NewGame from './components/NewGame.vue';
 
 export default Vue.extend({
   name: 'App',
 
   components: {
-    Dart,
+    Dart, ActiveGame, NewGame
   },
 
   data: () => ({

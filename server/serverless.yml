@@ -30,6 +30,12 @@ functions:
       - httpApi:
           path: /getGame
           method: get
+  getGameData:
+    handler: src/getGameData.handler
+    events:
+      - httpApi:
+          path: /getGameData
+          method: get
   createGame:
     handler: src/createGame.handler
     events:

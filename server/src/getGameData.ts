@@ -1,13 +1,11 @@
 import middy from 'middy';
 import { cors } from 'middy/middlewares';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { DynamoDB } from "aws-sdk";
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
-//import getGamePlayers from './utils';
 
 const documentClient = new DocumentClient({ region: 'eu-north-1' });
 
-export async function getGame(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
+export async function getGameData(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
     let params = {
         TableName: 'mainTable',
         KeyConditionExpression: "#pk = :gameid",
@@ -15,17 +13,25 @@ export async function getGame(event: APIGatewayProxyEvent): Promise<APIGatewayPr
             "#pk": "pk",
         },
         ExpressionAttributeValues: {
-            ":gameid": "g#" + event.queryStringParameters['gameid']
+            ":gameid": "t#" + event.queryStringParameters['gameid']
         }
     }
     try {
-        let gameItems = await documentClient.query(params).promise();
-        let gameInfo = {
-            players: gameItems.Items[0].Players
+        let throwItems = await documentClient.query(params).promise();
+
+        let throws = throwItems.Items.map( (dbitem) => {
+            return {
+                field: dbitem.field,
+                multiplier: dbitem.multiplier
+            }
+        })
+
+        let gameData = {
+            throws
         };
         return {
             statusCode: 200,
-            body: JSON.stringify(gameInfo)
+            body: JSON.stringify(gameData)
         };
     } catch (err) {
         return {
@@ -35,4 +41,4 @@ export async function getGame(event: APIGatewayProxyEvent): Promise<APIGatewayPr
     }
 }
 
-export const handler = middy(getGame).use(cors());
+export const handler = middy(getGameData).use(cors());

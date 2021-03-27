@@ -1,8 +1,13 @@
 <template>
   <v-container>
-    <v-row class="text-center">
+    <v-row class="text">
       <v-col cols="12">
-          
+         <h1 >New Game</h1>
+         <v-form id="playerform">
+             <v-input
+             > </v-input>
+         </v-form> 
+         <v-btn @click="addPlayer()">Add player</v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -17,19 +22,16 @@ export let apiAxios = axios.create();
 
 @Component
 export default class NewGame extends Vue {
-    private hello = "nothing";
-    private players = [];
+    private players = [''];
 
-    async createGame(): Promise<void> {
-        apiAxios.post("http://localhost:3000/dev/createGame", {
-            players : this.players
-        }).then(result => result.data);
+    addPlayer() {
+        this.players.push('');
     }
 
-    async test(): Promise<void> {
-        let r = await fetch("https://ny5wyit49b.execute-api.eu-north-1.amazonaws.com/hello");
-        let robj = await r.json();
-        this.hello = robj.hello;
+    async createGame(): Promise<void> {
+        apiAxios.post("http://192.168.86.48:3000/dev/createGame", {
+            players : this.players
+        }).then(result => result.data);
     }
 }
 
