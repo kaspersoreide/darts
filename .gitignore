@@ -1,0 +1,7 @@
+server/.env
+tmp
+node_modules
+server/.esbuild
+server/.serverless
+server/node_modules
+

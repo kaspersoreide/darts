@@ -1,0 +1,64 @@
+service: darts
+ 
+frameworkVersion: '2'
+ 
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+ 
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+  region: eu-north-1
+  httpApi:
+    cors: true
+ 
+custom:
+  esbuild:
+    target: es2019
+    tsconfig: ./tsconfig.json
+    minify: true
+ 
+  httpApi:
+    payload: '1.0'
+ 
+functions:
+  getGame:
+    handler: src/getGame.handler
+    events:
+      - httpApi:
+          path: /getGame
+          method: get
+  createGame:
+    handler: src/createGame.handler
+    events:
+      - httpApi:
+          path: /createGame
+          method: post
+  insertThrow:
+    handler: src/insertThrow.handler
+    events:
+      - httpApi:
+          path: /insertThrow
+          method: post
+
+resources:
+  Resources:
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: mainTable
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
