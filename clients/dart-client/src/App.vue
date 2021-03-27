@@ -26,40 +26,53 @@
       </div>
 
       <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+        <span class="mr-2">gameid: {{gameid}}</span>
     </v-app-bar>
 
     <v-main>
-      <Dart />
+    <v-dialog
+      v-model="createGameDialog"
+      persistent
+    >
+      <v-card>
+        <v-card-title class="headline">
+          Create new game
+        </v-card-title>
+        <v-card-text><NewGame @gameCreated="startGame"/></v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+        <v-btn @click="createGameDialog = true;"> New game </v-btn>
       <ActiveGame/>
-      <NewGame/>
     </v-main>
   </v-app>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
+import Component from 'vue-class-component'
 import Dart from './components/Dart.vue';
 import ActiveGame from './components/ActiveGame.vue';
 import NewGame from './components/NewGame.vue';
 
-export default Vue.extend({
-  name: 'App',
+@Component({
+    components : {
+        Dart, ActiveGame, NewGame
+    }
+})
+export default class App extends Vue {
 
-  components: {
-    Dart, ActiveGame, NewGame
-  },
+    private createGameDialog = false;
+    private gameid = '';
 
-  data: () => ({
-    //
-  }),
-});
+    startGame(gameid: string) {
+        this.gameid = gameid;
+        this.createGameDialog = false;
+    }
+
+
+
+}
 </script>

@@ -1,27 +1,14 @@
 import middy from 'middy';
 import { cors } from 'middy/middlewares';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { DynamoDB } from "aws-sdk";
-import { DocumentClient } from "aws-sdk/clients/dynamodb";
-//import getGamePlayers from './utils';
-
-const documentClient = new DocumentClient({ region: 'eu-north-1' });
+import { getGamePlayers } from './dbUtils';
 
 export async function getGame(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
-    let params = {
-        TableName: 'mainTable',
-        KeyConditionExpression: "#pk = :gameid",
-        ExpressionAttributeNames: {
-            "#pk": "pk",
-        },
-        ExpressionAttributeValues: {
-            ":gameid": "g#" + event.queryStringParameters['gameid']
-        }
-    }
+    
     try {
-        let gameItems = await documentClient.query(params).promise();
+        let players = await getGamePlayers(event.queryStringParameters['gameid']);
         let gameInfo = {
-            players: gameItems.Items[0].Players
+            players: players
         };
         return {
             statusCode: 200,
