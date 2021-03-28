@@ -5,7 +5,6 @@ import { DynamoDB } from "aws-sdk";
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
 
 const database = new DynamoDB({ region: 'eu-north-1' });
-const documentClient = new DocumentClient({ region: 'eu-north-1' });
 
 export async function createGame(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
     let body = JSON.parse(event.body);
