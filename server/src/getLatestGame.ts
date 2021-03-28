@@ -10,6 +10,7 @@ export async function getLatestGame(event: APIGatewayProxyEvent): Promise<APIGat
 
     let params = {
         TableName: 'mainTable',
+        IndexName: 'gs1',
         KeyConditionExpression: "#gs1pk = :game",
         ExpressionAttributeNames: {
             "#gs1pk": "gs1pk",
