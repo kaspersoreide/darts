@@ -51,6 +51,18 @@
                             <v-radio key="3" label="Triple" value="3"></v-radio>
                         </v-radio-group>
                         </v-col>
+                        <v-col cols="3">
+                            <v-row>
+                                <v-col>
+                                    <v-btn @click="sendThrowDirect('25')" class="pr-0 pl-0" block>25</v-btn>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col>
+                                    <v-btn @click="sendThrowDirect('50')" class="pr-0 pl-0" block>50</v-btn>
+                                </v-col>
+                            </v-row>
+                        </v-col>
                         
                     </v-row>
                 </v-container>
@@ -125,7 +137,7 @@ export default class ActiveGame extends Vue {
         this.multiplier = '1';
     }
 
-    sendThrowDirect(value) {
+    sendThrowDirect(value: string) {
         let f = parseInt(value);
         let m = parseInt(this.multiplier);
         this.insertThrow(f,m);

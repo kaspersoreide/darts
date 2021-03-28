@@ -63,6 +63,12 @@ functions:
       - httpApi:
           path: /undoThrow
           method: post
+  getLatestGame:
+    handler: src/getLatestGame.handler
+    events:
+      - httpApi:
+          path: /getLatestGame
+          method: get
 
 resources:
   Resources:
