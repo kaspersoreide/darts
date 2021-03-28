@@ -88,6 +88,10 @@ resources:
             AttributeType: S
           - AttributeName: sk
             AttributeType: S
+          - AttributeName: gs1pk
+            AttributeType: S
+          - AttributeName: gs1sk
+            AttributeType: S
         KeySchema:
           - AttributeName: pk
             KeyType: HASH

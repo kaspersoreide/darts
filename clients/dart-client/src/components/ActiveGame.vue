@@ -138,6 +138,8 @@ export default class ActiveGame extends Vue {
     }
 
     sendThrowDirect(value: string) {
+        console.log("Players:");
+        console.dir(this.players);
         let f = parseInt(value);
         let m = parseInt(this.multiplier);
         this.insertThrow(f,m);
