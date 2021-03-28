@@ -2,7 +2,7 @@
   <v-container>
     <v-row class="text-center">
       <v-col cols="12">
-            <h1>Current Player: {{currentPlayer}}</h1>
+            <h1>Current Player: {{currentPlayer}}, throws: {{ currentThrows() }} </h1>
             <v-simple-table>
                 <template v-slot:default>
                 <thead>
@@ -102,11 +102,20 @@ export default class ActiveGame extends Vue {
     private field = "";
     private multiplier = "1";
     private currentPlayer = "nobody";
+    private throwsInTurn = [];
    
     activeColor(player : PlayerStat) {
         if (player.score == 0) return "green";
         if (player.status == "bust") return "red";
         if (player.player == this.currentPlayer) return "blue";
+    }
+
+    currentThrows() {
+        let dings = "";
+        this.throwsInTurn.forEach( (t) => {
+            dings+=t.multiplier*t.field + ", "
+        })
+        return dings;
     }
 
     mounted() {
@@ -124,6 +133,7 @@ export default class ActiveGame extends Vue {
         console.log("PP", robj.playerstat);
         this.players = robj.playerstat;
         this.currentPlayer = robj.currentPlayer;
+        this.throwsInTurn = robj.throwsInTurn;
     }
 
     async undoThrow() {
