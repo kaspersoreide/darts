@@ -22,6 +22,7 @@
                     <tr
                     v-for="player in players"
                     :key="player.name"
+                    v-bind:style="{ color: activeColor(player) }"
                     >
                     <td>{{ player.player }}</td>
                     <td>{{ player.score }}</td>
@@ -39,7 +40,9 @@
                 <v-container>
                     <v-row>
                         <v-col cols="6">
-                            <v-text-field v-model="field"></v-text-field>
+                            <v-text-field type="number" v-model="field"></v-text-field>
+                            <v-btn color="green" @click="sendThrow">Send</v-btn>
+                            <v-btn color="red" @click="undoThrow">Undo last throw</v-btn>
                         </v-col>
                         <v-col>
                             <v-radio-group v-model="multiplier">
@@ -48,10 +51,7 @@
                             <v-radio key="3" label="Triple" value="3"></v-radio>
                         </v-radio-group>
                         </v-col>
-                        <v-col>
-                            <v-btn @click="sendThrow">Send</v-btn>
-                            <v-btn @click="undoThrow">Undo last throw</v-btn>
-                        </v-col>
+                        
                     </v-row>
                 </v-container>
             </v-form>
@@ -72,6 +72,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator';
+import { PlayerStat } from '../../../../server/src/interfaces'
 import * as settings from '../settings'
 import axios from 'axios';
 export let apiAxios = axios.create();
@@ -84,6 +85,12 @@ export default class ActiveGame extends Vue {
     private field = "";
     private multiplier = "1";
     private currentPlayer = "nobody";
+    
+    activeColor(player : PlayerStat) {
+        if (player.score == 0) return "green";
+        if (player.status == "bust") return "red";
+        if (player.player == this.currentPlayer) return "blue";
+    }
 
     mounted() {
         setInterval( () => {
