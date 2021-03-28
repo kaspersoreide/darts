@@ -7,7 +7,8 @@ export interface Throw {
 export interface PlayerStat {
     player: string,
     score: number,
-    status: string
+    status: string,
+    lastThrows: Throw[]
 }
 export interface GameData {
     currentPlayer: string,

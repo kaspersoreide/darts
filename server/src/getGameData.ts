@@ -11,7 +11,7 @@ export async function getGameData(event: APIGatewayProxyEvent): Promise<APIGatew
 
     let playerstat:PlayerStat[] = [];
     for(let p in players) {
-        playerstat[p] = { player: players[p], score: 501, status: "playing" };
+        playerstat[p] = { player: players[p], score: 501, status: "playing", lastThrows: [] };
     }
 
     let playernumber = 0;
@@ -21,6 +21,7 @@ export async function getGameData(event: APIGatewayProxyEvent): Promise<APIGatew
         playerstat[playernumber].status = "playing";
         playerstat[playernumber].score -= t.field * t.multiplier;
         throwsInTurn.push(t);
+        playerstat[playernumber].lastThrows.push(t);
         let nextTurn = false;
         if (playerstat[playernumber].score < 0) { // BUST¨
             if (i == gameThrows.length - 1) {
@@ -49,6 +50,7 @@ export async function getGameData(event: APIGatewayProxyEvent): Promise<APIGatew
                 playernumber%=players.length;
                 skips++;
             }
+            playerstat[playernumber].lastThrows = [];
         }
     });
 

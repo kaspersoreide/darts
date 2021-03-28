@@ -1,1 +1,1 @@
-export const urlprefix = "https://3o11qeqasd.execute-api.eu-north-1.amazonaws.com";
+export const urlprefix = "http://localhost:3000/dev";//"https://3o11qeqasd.execute-api.eu-north-1.amazonaws.com";

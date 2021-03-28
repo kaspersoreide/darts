@@ -2,19 +2,28 @@
   <v-container>
     <v-row class="text-center">
       <v-col cols="12">
-            <h1>Current Player: {{currentPlayer}}, throws: {{ currentThrows() }} </h1>
+            <h1>Current Player: {{currentPlayer}}</h1>
             <v-simple-table>
                 <template v-slot:default>
                 <thead>
                     <tr>
-                    <th class="text-left">
+                    <th class="text-center">
                         Player
                     </th>
-                    <th class="text-left">
+                    <th class="text-center">
                         Points
                     </th>
-                    <th class="text-left">
+                    <th class="text-center">
                         Status
+                    </th>
+                    <th class="text-center">
+                        Last throw 1
+                    </th>
+                    <th class="text-center">
+                        Last throw 2
+                    </th>
+                    <th class="text-center">
+                        Last throw 3
                     </th>
                     </tr>
                 </thead>
@@ -27,6 +36,7 @@
                     <td>{{ player.player }}</td>
                     <td>{{ player.score }}</td>
                     <td>{{ player.status }}</td>
+                    <td v-for="theThrow in player.lastThrows" :key="theThrow.timestamp">{{ theThrow.field }}</td>
                     </tr>
                 </tbody>
                 </template>
