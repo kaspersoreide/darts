@@ -57,11 +57,11 @@
             </v-form>
         </v-col>
     </v-row>
-    <v-row v-if="false">
+    <v-row v-if="true">
         <v-col>
-            <v-row v-for="r in [1,2,3,4,5]" v-bind:key="r">
-                <v-col v-for="c in [1,2,3,4,5,6]" v-bind:key="c">
-                    <v-btn>{{c+(r-1)*6}}</v-btn>
+            <v-row v-for="r in [1,2,3,4]" v-bind:key="r">
+                <v-col v-for="c in [1,2,3,4,5]" v-bind:key="c">
+                    <v-btn @click="sendThrowDirect(c+(r-1)*5)" class="pr-0 pl-0" block>{{c+(r-1)*5}}</v-btn>
                 </v-col>
             </v-row>
         </v-col>
@@ -85,7 +85,7 @@ export default class ActiveGame extends Vue {
     private field = "";
     private multiplier = "1";
     private currentPlayer = "nobody";
-    
+   
     activeColor(player : PlayerStat) {
         if (player.score == 0) return "green";
         if (player.status == "bust") return "red";
@@ -119,6 +119,14 @@ export default class ActiveGame extends Vue {
 
     sendThrow() {
         let f = parseInt(this.field);
+        let m = parseInt(this.multiplier);
+        this.insertThrow(f,m);
+        this.field = '';
+        this.multiplier = '1';
+    }
+
+    sendThrowDirect(value) {
+        let f = parseInt(value);
         let m = parseInt(this.multiplier);
         this.insertThrow(f,m);
         this.field = '';
