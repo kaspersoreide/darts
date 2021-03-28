@@ -49,7 +49,7 @@ export default class NewGame extends Vue {
 
     async createGame(): Promise<void> {
         if (this.players.length !== 0) {
-            apiAxios.post(settings.urlprefix+"/dev/createGame", {
+            apiAxios.post(settings.urlprefix+"/createGame", {
                 players : this.players
             }).then(result => {
                 this.$emit("gameCreated", result.data.gameid);

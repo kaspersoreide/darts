@@ -39,7 +39,7 @@
                 <v-container>
                     <v-row>
                         <v-col cols="6">
-                            <v-text-field v-model="field">0</v-text-field>
+                            <v-text-field v-model="field"></v-text-field>
                         </v-col>
                         <v-col>
                             <v-radio-group v-model="multiplier">
@@ -50,6 +50,7 @@
                         </v-col>
                         <v-col>
                             <v-btn @click="sendThrow">Send</v-btn>
+                            <v-btn @click="undoThrow">Undo last throw</v-btn>
                         </v-col>
                     </v-row>
                 </v-container>
@@ -80,7 +81,7 @@ import * as vosk from 'vosk-browser';
 export default class ActiveGame extends Vue {
     @Prop() gameid!: string;
     private players = [];
-    private field = "0";
+    private field = "";
     private multiplier = "1";
     private currentPlayer = "nobody";
 
@@ -89,22 +90,32 @@ export default class ActiveGame extends Vue {
             if(this.gameid!="") {
                 this.updateGameData();
             }
-        }, 5000);
+        }, 1000); 
         //this.initSpeech();
     }
 
     async updateGameData() {
-        let r = await fetch(settings.urlprefix+"/dev/getGameData?gameid="+this.gameid);
+        let r = await fetch(settings.urlprefix+"/getGameData?gameid="+this.gameid);
         let robj = await r.json();
         console.log("PP", robj.playerstat);
         this.players = robj.playerstat;
         this.currentPlayer = robj.currentPlayer;
     }
 
+    async undoThrow() {
+        const throwBody = { gameid: this.gameid };
+        await apiAxios.post(settings.urlprefix+"/undoThrow", throwBody).then(result => {
+            console.log("Throw deleted!");
+        });
+        this.updateGameData();
+    }
+
     sendThrow() {
         let f = parseInt(this.field);
         let m = parseInt(this.multiplier);
         this.insertThrow(f,m);
+        this.field = '';
+        this.multiplier = '1';
     }
 
     async insertThrow(field: number, multiplier: number) {
@@ -114,7 +125,7 @@ export default class ActiveGame extends Vue {
             field, 
             multiplier 
             };
-        await apiAxios.post(settings.urlprefix+"/dev/insertThrow", throwBody).then(result => {
+        await apiAxios.post(settings.urlprefix+"/insertThrow", throwBody).then(result => {
             console.log("Throw inserted");
         });
         this.updateGameData();

@@ -13,6 +13,11 @@ provider:
   region: eu-north-1
   httpApi:
     cors: true
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'DynamoDB:*'
+      Resource: "*"
  
 custom:
   esbuild:
@@ -47,6 +52,12 @@ functions:
     events:
       - httpApi:
           path: /insertThrow
+          method: post
+  undoThrow:
+    handler: src/undoThrow.handler
+    events:
+      - httpApi:
+          path: /undoThrow
           method: post
 
 resources:

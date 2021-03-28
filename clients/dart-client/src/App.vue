@@ -32,7 +32,6 @@
     <v-main>
     <v-dialog
       v-model="createGameDialog"
-      persistent
     >
       <v-card>
         <v-card-title class="headline">
@@ -44,7 +43,27 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog
+      v-model="joinGameDialog"
+    >
+      <v-card>
+        <v-card-title class="headline">
+          Join game
+        </v-card-title>
+        <v-card-text>
+            <v-form>
+                <v-text-field placeholder="enter game ID" v-model="gameidjoin"/>
+            </v-form>
+        <v-btn @click="joinGame"> Join! </v-btn> 
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+        
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
         <v-btn @click="createGameDialog = true;"> New game </v-btn>
+        <v-btn @click="joinGameDialog = true;"> Join game </v-btn>
       <ActiveGame :gameid="gameid"/>
     </v-main>
   </v-app>
@@ -64,14 +83,19 @@ import NewGame from './components/NewGame.vue';
 export default class App extends Vue {
 
     private createGameDialog = false;
+    private gameidjoin = '';
     private gameid = '';
+    private joinGameDialog = false;
 
     startGame(gameid: string) {
         this.gameid = gameid;
         this.createGameDialog = false;
     }
 
-
+    joinGame() {
+        this.gameid = this.gameidjoin;
+        this.joinGameDialog = false;
+    }
 
 }
 </script>
