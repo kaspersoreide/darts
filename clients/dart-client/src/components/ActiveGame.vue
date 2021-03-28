@@ -89,7 +89,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator';
-import { PlayerStat } from '../../../../server/src/interfaces'
+import { PlayerStat, Throw } from '../../../../server/src/interfaces'
 import * as settings from '../settings'
 import axios from 'axios';
 export let apiAxios = axios.create();
@@ -112,7 +112,7 @@ export default class ActiveGame extends Vue {
 
     currentThrows() {
         let dings = "";
-        this.throwsInTurn.forEach( (t) => {
+        this.throwsInTurn.forEach( (t: Throw) => {
             dings+=t.multiplier*t.field + ", "
         })
         return dings;
