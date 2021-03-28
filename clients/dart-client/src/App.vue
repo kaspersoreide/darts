@@ -64,7 +64,7 @@
     </v-dialog>
         <v-btn @click="createGameDialog = true;"> New game </v-btn>
         <v-btn @click="joinGameDialog = true;"> Join game </v-btn>
-        <v-btn @click="joinLatestGame"> Join most recent game </v-btn>
+        <v-btn @click="joinLatestGame()"> Join most recent game </v-btn>
       <ActiveGame :gameid="gameid"/>
     </v-main>
   </v-app>
@@ -75,6 +75,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component'
 import ActiveGame from './components/ActiveGame.vue';
 import NewGame, { apiAxios } from './components/NewGame.vue';
+import * as settings from './settings';
 
 @Component({
     components : {
@@ -88,8 +89,9 @@ export default class App extends Vue {
     private gameid = '';
     private joinGameDialog = false;
 
-    joinLatestGame() {
-
+    async joinLatestGame() {
+        let response = await apiAxios.get(settings.urlprefix+"/getLatestGame");
+        console.dir(response);
     }
 
     startGame(gameid: string) {
