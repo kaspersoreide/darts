@@ -22,10 +22,11 @@ export async function getLatestGame(event: APIGatewayProxyEvent): Promise<APIGat
         }
     }
     let gameItems = await documentClient.query(params).promise();
-    let game = gameItems.Items[0];
+    let gameid = gameItems.Items[0].pk;
+    let strippedGameId = gameid.substr(2);
     return {
         statusCode: 200,
-        body: JSON.stringify({game})
+        body: JSON.stringify({gameid: strippedGameId})
     };
 }
 
