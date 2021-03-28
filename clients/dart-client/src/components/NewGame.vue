@@ -34,6 +34,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import axios from 'axios';
+import * as settings from '../settings'
 
 export let apiAxios = axios.create();
 
@@ -48,7 +49,7 @@ export default class NewGame extends Vue {
 
     async createGame(): Promise<void> {
         if (this.players.length !== 0) {
-            apiAxios.post("http://192.168.86.48:3000/dev/createGame", {
+            apiAxios.post(settings.urlprefix+"/dev/createGame", {
                 players : this.players
             }).then(result => {
                 this.$emit("gameCreated", result.data.gameid);

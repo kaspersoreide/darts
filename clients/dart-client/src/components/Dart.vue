@@ -24,6 +24,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import * as settings from '../settings'
 
 @Component
 export default class Dart extends Vue {
@@ -31,7 +32,7 @@ export default class Dart extends Vue {
     private players = [];
 
     async getGame() {
-        let r = await fetch("http://192.168.86.48:3000/dev/getGame?gameid=ABFG");
+        let r = await fetch(settings.urlprefix+":3000/dev/getGame?gameid=ABFG");
         let robj = await r.json();
         this.players = robj.players;
     }

@@ -45,7 +45,7 @@
       </v-card>
     </v-dialog>
         <v-btn @click="createGameDialog = true;"> New game </v-btn>
-      <ActiveGame/>
+      <ActiveGame :gameid="gameid"/>
     </v-main>
   </v-app>
 </template>
@@ -65,7 +65,7 @@ import NewGame from './components/NewGame.vue';
 export default class App extends Vue {
 
     private createGameDialog = false;
-    private gameid = '';
+    private gameid = 'test';
 
     startGame(gameid: string) {
         this.gameid = gameid;

@@ -2,16 +2,16 @@ import middy from 'middy';
 import { cors } from 'middy/middlewares';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { DynamoDB } from "aws-sdk";
-import { DocumentClient } from "aws-sdk/clients/dynamodb";
 
 const database = new DynamoDB({ region: 'eu-north-1' });
 
 export async function insertThrow(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
     let body = JSON.parse(event.body);
+    console.log("Body:",body);
     let UpdateExpression = "set field = :field, multiplier = :multiplier";
     let ExpressionAttributeValues: any = {
-        ":field": { N: body.field },
-        ":multiplier": { N : body.multiplier }
+        ":field": { N: body.field.toString() },
+        ":multiplier": { N : body.multiplier.toString() }
     };
     let gameId = body.gameid;
     let dateobj = new Date();

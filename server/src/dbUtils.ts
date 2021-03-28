@@ -15,7 +15,7 @@ export async function getGamePlayers(gameid: string): Promise<string[]> {
         }
     }
     let gameItems = await documentClient.query(params).promise();
-    return gameItems.Items[0].Players
+    return gameItems.Items[0].Players.values
 }
 
 export async function getGameThrows(gameid: string): Promise<Throw[]> {
@@ -34,7 +34,8 @@ export async function getGameThrows(gameid: string): Promise<Throw[]> {
     return throwItems.Items.map( (dbitem) => {
         return {
             field: dbitem.field,
-            multiplier: dbitem.multiplier
+            multiplier: dbitem.multiplier,
+            timestamp: dbitem.sk
         }
     });
 }
