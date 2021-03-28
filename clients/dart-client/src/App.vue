@@ -91,7 +91,7 @@ export default class App extends Vue {
 
     async joinLatestGame() {
         let response = await apiAxios.get(settings.urlprefix+"/getLatestGame");
-        console.dir(response);
+        this.gameid = response.data.gameid;
     }
 
     startGame(gameid: string) {
