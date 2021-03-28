@@ -54,6 +54,11 @@
                         <v-col cols="3">
                             <v-row>
                                 <v-col>
+                                    <v-btn @click="sendThrowDirect('0')" class="pr-0 pl-0" block>0</v-btn>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col>
                                     <v-btn @click="sendThrowDirect('25')" class="pr-0 pl-0" block>25</v-btn>
                                 </v-col>
                             </v-row>
