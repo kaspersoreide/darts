@@ -20,6 +20,7 @@
   "devDependencies": {
     "@serverless/typescript": "^2.30.3",
     "@types/aws-lambda": "^8.10.73",
-    "@types/node": "^14.14.37"
+    "@types/node": "^14.14.37",
+    "serverless-s3-sync": "^1.17.0"
   }
 }
