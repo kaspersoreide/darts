@@ -55,7 +55,8 @@ export async function getGameData(event: APIGatewayProxyEvent): Promise<APIGatew
     let gameData: GameData = {
         throws: gameThrows,
         playerstat,
-        currentPlayer: players[playernumber]
+        currentPlayer: players[playernumber],
+        throwsInTurn
     };
     return {
         statusCode: 200,

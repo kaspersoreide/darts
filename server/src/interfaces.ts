@@ -12,6 +12,7 @@ export interface PlayerStat {
 export interface GameData {
     currentPlayer: string,
     throws: Throw[],
-    playerstat: PlayerStat[]
+    playerstat: PlayerStat[],
+    throwsInTurn: Throw[]
 
 }
