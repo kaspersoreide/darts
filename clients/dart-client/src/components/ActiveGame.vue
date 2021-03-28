@@ -2,7 +2,7 @@
   <v-container>
     <v-row class="text-center">
       <v-col cols="12">
-            <h1>Current Player: {{currentPlayer}} ({{gameid}})</h1>
+            <h1>Current Player: {{currentPlayer}}</h1>
             <v-simple-table>
                 <template v-slot:default>
                 <thead>
@@ -13,6 +13,9 @@
                     <th class="text-left">
                         Points
                     </th>
+                    <th class="text-left">
+                        Status
+                    </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -22,13 +25,13 @@
                     >
                     <td>{{ player.player }}</td>
                     <td>{{ player.score }}</td>
+                    <td>{{ player.status }}</td>
                     </tr>
                 </tbody>
                 </template>
             </v-simple-table>
 
       </v-col>
-    <v-btn @click="getGameData()">Get Game Data!</v-btn>
     </v-row>
     <v-row>
         <v-col>
@@ -53,6 +56,15 @@
             </v-form>
         </v-col>
     </v-row>
+    <v-row v-if="false">
+        <v-col>
+            <v-row v-for="r in [1,2,3,4,5]" v-bind:key="r">
+                <v-col v-for="c in [1,2,3,4,5,6]" v-bind:key="c">
+                    <v-btn>{{c+(r-1)*6}}</v-btn>
+                </v-col>
+            </v-row>
+        </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -62,16 +74,26 @@ import { Component, Prop } from 'vue-property-decorator';
 import * as settings from '../settings'
 import axios from 'axios';
 export let apiAxios = axios.create();
+import * as vosk from 'vosk-browser';
 
 @Component
-export default class Dart extends Vue {
+export default class ActiveGame extends Vue {
     @Prop() gameid!: string;
     private players = [];
     private field = "0";
     private multiplier = "1";
     private currentPlayer = "nobody";
 
-    async getGameData() {
+    mounted() {
+        setInterval( () => {
+            if(this.gameid!="") {
+                this.updateGameData();
+            }
+        }, 5000);
+        //this.initSpeech();
+    }
+
+    async updateGameData() {
         let r = await fetch(settings.urlprefix+"/dev/getGameData?gameid="+this.gameid);
         let robj = await r.json();
         console.log("PP", robj.playerstat);
@@ -92,11 +114,46 @@ export default class Dart extends Vue {
             field, 
             multiplier 
             };
-        apiAxios.post(settings.urlprefix+"/dev/insertThrow", throwBody).then(result => {
+        await apiAxios.post(settings.urlprefix+"/dev/insertThrow", throwBody).then(result => {
             console.log("Throw inserted");
         });
+        this.updateGameData();
     }
 
+    async initSpeech() {
+        console.dir(vosk);
+        const model = await vosk.createModel('model.tar.gz');
+
+        const recognizer = new model.KaldiRecognizer();
+        recognizer.on("result", (message) => {
+            console.log(`Result: ${message.result}`);
+        });
+        recognizer.on("partialresult", (message) => {
+            console.log(`Partial result: ${message.result}`);
+        });
+        
+        const mediaStream = await navigator.mediaDevices.getUserMedia({
+            video: false,
+            audio: {
+                echoCancellation: true,
+                noiseSuppression: true,
+                channelCount: 1,
+                sampleRate: 16000
+            },
+        });
+        
+        const audioContext = new AudioContext();
+        const recognizerNode = audioContext.createScriptProcessor(4096, 1, 1)
+        recognizerNode.onaudioprocess = (event) => {
+            try {
+                recognizer.acceptWaveform(event.inputBuffer)
+            } catch (error) {
+                console.error('acceptWaveform failed', error)
+            }
+        }
+        const source = audioContext.createMediaStreamSource(mediaStream);
+        source.connect(recognizerNode);
+    }
 
 }
 

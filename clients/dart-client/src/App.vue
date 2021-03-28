@@ -53,19 +53,18 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component'
-import Dart from './components/Dart.vue';
 import ActiveGame from './components/ActiveGame.vue';
 import NewGame from './components/NewGame.vue';
 
 @Component({
     components : {
-        Dart, ActiveGame, NewGame
+        ActiveGame, NewGame
     }
 })
 export default class App extends Vue {
 
     private createGameDialog = false;
-    private gameid = 'test';
+    private gameid = '';
 
     startGame(gameid: string) {
         this.gameid = gameid;
