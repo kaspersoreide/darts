@@ -2,7 +2,7 @@ import React, { ReactElement, FC, useState } from "react";
 import Header from './Header';
 import { Container, Toolbar } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { APP_TITLE } from "utils/constants";
+import { APP_TITLE, POLLING_INTERVAL_IN_MS } from "utils/constants";
 import Main from "./Main";
 import { GameData } from "../../../../server/src/interfaces";
 import { loadLatestGameId, loadGameFromId, createGame } from "api";
@@ -60,7 +60,7 @@ const Layout: FC<LayoutProps> = (): ReactElement => {
           stopPollingGame();
         }
       }
-    }, 1000))
+    }, POLLING_INTERVAL_IN_MS))
   }
 
   const stopPollingGame = () => {
@@ -84,7 +84,7 @@ const Layout: FC<LayoutProps> = (): ReactElement => {
       <CssBaseline />
       <Header title={APP_TITLE} loadGame={loadGame} currentGameId={gameId} doCreateGame={doCreateGame} doSetGame={doSetGame}/>
       <Toolbar />
-      <Main currentGame={game} />
+      <Main currentGame={game} gameId={gameId} />
     </Container>
   );
 };

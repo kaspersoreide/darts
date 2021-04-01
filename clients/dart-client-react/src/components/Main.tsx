@@ -26,9 +26,10 @@ const useStyles = makeStyles(theme => ({
 
 interface MainProps {
   currentGame: GameData | null;
+  gameId: string;
 }
 
-const Main: FC<MainProps> = ( { currentGame }): ReactElement => {
+const Main: FC<MainProps> = ( { currentGame, gameId }): ReactElement => {
   const styles = useStyles();
   return (
     <Container className={styles.root}>
@@ -36,13 +37,13 @@ const Main: FC<MainProps> = ( { currentGame }): ReactElement => {
         Current player: {currentGame?.currentPlayer ?? 'Nobody'}
       </Typography> 
       <Grid container spacing={4}>
-          <Grid item md>
-            <PlayerTable currentGame={currentGame}/>
-          </Grid>
-          <Grid item md>
-            <ButtonGrid />
-          </Grid>
+        <Grid item md>
+          <PlayerTable currentGame={currentGame}/>
         </Grid>
+        <Grid item md>
+          <ButtonGrid gameId={gameId}/>
+        </Grid>
+      </Grid>
     </Container>
   );
 };
