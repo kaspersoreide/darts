@@ -1,3 +1,6 @@
+
+
+export type Status = 'playing' | 'bust' | 'wonjustnow' | 'haswon';
 export interface Throw {
   field: number,
   multiplier: number,
@@ -17,7 +20,7 @@ export interface UndoThrow {
 export interface PlayerStat {
   player: string,
   score: number,
-  status: string,
+  status: Status,
   lastThrows: Throw[]
 }
 export interface GameData {

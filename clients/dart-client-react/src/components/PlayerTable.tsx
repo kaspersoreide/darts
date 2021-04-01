@@ -1,5 +1,5 @@
 import React, { ReactElement, FC } from "react";
-import { GameData } from "../../../../server/src/interfaces";
+import { GameData, PlayerStat } from "../../../../server/src/interfaces";
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -14,17 +14,14 @@ const useStyles = makeStyles(theme => ({
     paddingTop: '20px',
   },
   active: {
-    color: 'blue'
+    background: '#007eff3b'
   },
   busted: {
-    color: 'red'
+    color: '#ff00003b'
   },
   done: {
-    color: 'green'
+    background: '#00ff1f3b'
   },
-  currentPlayer: {
-    paddingBottom: '5px'
-  }
 }));
 
 interface PlayerProps {
@@ -33,6 +30,25 @@ interface PlayerProps {
 
 const PlayerTable: FC<PlayerProps> = ( { currentGame }): ReactElement => {
   const styles = useStyles();
+
+  const isBust = (stat: PlayerStat) => {
+    return stat.status === 'bust';
+  }
+
+  const isFinished = (stat: PlayerStat) => {
+    return stat.status === 'haswon' || stat.status === 'wonjustnow';
+  }
+
+  const getClassForPlayerRow = (stat: PlayerStat) => {
+    if (isFinished(stat))
+      return styles.done;
+    if (isBust(stat))
+      return styles.busted;
+    if (currentGame?.currentPlayer === stat.player)
+      return styles.active;
+    return '';
+  }
+
   return (
     <TableContainer component={Paper}>
       <Table aria-label="simple table">
@@ -47,16 +63,16 @@ const PlayerTable: FC<PlayerProps> = ( { currentGame }): ReactElement => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {currentGame?.playerstat?.map(player => (
-            <TableRow key={player.player} >
-              <TableCell className={currentGame.currentPlayer === player.player ? styles.active : ''} component="th" scope="row">
-                {player.player}
+          {currentGame?.playerstat?.map(playerStat => (
+            <TableRow key={playerStat.player} className={getClassForPlayerRow(playerStat)} >
+              <TableCell component="th" scope="row">
+                {playerStat.player}
               </TableCell>
-              <TableCell className={currentGame.currentPlayer === player.player ? styles.active : ''} align="right">{player.status}</TableCell>
-              <TableCell className={currentGame.currentPlayer === player.player ? styles.active : ''} align="right">{player.score}</TableCell>
-              <TableCell className={currentGame.currentPlayer === player.player ? styles.active : ''} align="right">{player.lastThrows.length > 0 ? (player.lastThrows[0].multiplier + ' * ' + player.lastThrows[0].field) : ''}</TableCell>
-              <TableCell className={currentGame.currentPlayer === player.player ? styles.active : ''} align="right">{player.lastThrows.length > 1 ? (player.lastThrows[1].multiplier + ' * ' + player.lastThrows[1].field) : ''}</TableCell>
-              <TableCell className={currentGame.currentPlayer === player.player ? styles.active : ''} align="right">{player.lastThrows.length > 2 ? (player.lastThrows[2].multiplier + ' * ' + player.lastThrows[2].field) : ''}</TableCell>
+              <TableCell align="right">{playerStat.status}</TableCell>
+              <TableCell align="right">{playerStat.score}</TableCell>
+              <TableCell align="right">{playerStat.lastThrows.length > 0 ? (playerStat.lastThrows[0].multiplier + ' * ' + playerStat.lastThrows[0].field) : ''}</TableCell>
+              <TableCell align="right">{playerStat.lastThrows.length > 1 ? (playerStat.lastThrows[1].multiplier + ' * ' + playerStat.lastThrows[1].field) : ''}</TableCell>
+              <TableCell align="right">{playerStat.lastThrows.length > 2 ? (playerStat.lastThrows[2].multiplier + ' * ' + playerStat.lastThrows[2].field) : ''}</TableCell>
             </TableRow>
           ))}
         </TableBody>
