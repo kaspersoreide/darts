@@ -1,8 +1,9 @@
 import React, { ReactElement, FC } from "react";
-import { Container, Typography, Grid } from "@material-ui/core"
+import { Container, Grid } from "@material-ui/core"
 import { GameData } from "../../../../server/src/interfaces";
 import { makeStyles } from '@material-ui/core/styles';
 import PlayerTable from './PlayerTable';
+import DartBoard from './DartBoard';
 import ButtonGrid from './ButtonGrid';
 
 const useStyles = makeStyles(theme => ({
@@ -33,15 +34,13 @@ const Main: FC<MainProps> = ( { currentGame, gameId }): ReactElement => {
   const styles = useStyles();
   return (
     <Container className={styles.root}>
-      <Typography variant="h6" className={styles.currentPlayer}>
-        Current player: {currentGame?.currentPlayer ?? 'Nobody'}
-      </Typography> 
       <Grid container spacing={4}>
         <Grid item md>
           <PlayerTable currentGame={currentGame}/>
         </Grid>
         <Grid item md>
           <ButtonGrid gameId={gameId}/>
+          <DartBoard />
         </Grid>
       </Grid>
     </Container>
