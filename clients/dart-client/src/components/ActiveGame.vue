@@ -103,7 +103,6 @@ import { PlayerStat, Throw } from '../../../../server/src/interfaces'
 import * as settings from '../settings'
 import axios from 'axios';
 export let apiAxios = axios.create();
-import * as vosk from 'vosk-browser';
 
 @Component
 export default class ActiveGame extends Vue {
@@ -134,7 +133,9 @@ export default class ActiveGame extends Vue {
                 this.updateGameData();
             }
         }, 1000); 
-        //this.initSpeech();
+        this.initSpeech().catch(ex => {
+            console.log("ex",ex);
+        })
     }
 
     async updateGameData() {
@@ -186,14 +187,18 @@ export default class ActiveGame extends Vue {
     }
 
     async initSpeech() {
-        console.dir(vosk);
-        const model = await vosk.createModel('model.tar.gz');
+        const vosk = (window as any).Vosk;
+        console.dir("Vosk:" , vosk);
+        
+        const model = await vosk.createModel('https://ccoreilly.github.io/vosk-browser/models/vosk-model-small-en-us-0.15.tar.gz');
+        console.log("model:", model);
 
         const recognizer = new model.KaldiRecognizer();
-        recognizer.on("result", (message) => {
+        console.log("recognizer:", recognizer);
+        recognizer.on("result", (message:any) => {
             console.log(`Result: ${message.result}`);
         });
-        recognizer.on("partialresult", (message) => {
+        recognizer.on("partialresult", (message:any) => {
             console.log(`Partial result: ${message.result}`);
         });
         
@@ -206,7 +211,10 @@ export default class ActiveGame extends Vue {
                 sampleRate: 16000
             },
         });
+
+        console.log("mediaStream:", mediaStream);
         
+
         const audioContext = new AudioContext();
         const recognizerNode = audioContext.createScriptProcessor(4096, 1, 1)
         recognizerNode.onaudioprocess = (event) => {
@@ -217,6 +225,7 @@ export default class ActiveGame extends Vue {
             }
         }
         const source = audioContext.createMediaStreamSource(mediaStream);
+        console.log("source: ", source);
         source.connect(recognizerNode);
     }
 
