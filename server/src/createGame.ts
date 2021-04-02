@@ -1,8 +1,7 @@
 import middy from 'middy';
-import { cors } from 'middy/middlewares';
+import cors from '@middy/http-cors'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { DynamoDB } from "aws-sdk";
-import { DocumentClient } from "aws-sdk/clients/dynamodb";
 
 const database = new DynamoDB({ region: 'eu-north-1' });
 

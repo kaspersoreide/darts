@@ -8,25 +8,20 @@
       <div class="d-flex align-center">
         <v-img
           alt="Vuetify Logo"
-          class="shrink mr-2"
+          class="mr-2"
           contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+          src="./assets/dart.png"
           transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
+          width="80"
         />
       </div>
 
+      <span class="mr-2">GAME: {{gameid}}</span>
       <v-spacer></v-spacer>
-        <span class="mr-2">gameid: {{gameid}}</span>
+        <v-btn color="secondary" class="mr-3" @click="createGameDialog = true;"> New game </v-btn>
+        <v-btn color="secondary" class="mr-3" @click="joinGameDialog = true;"> Join game </v-btn>
+        <v-btn color="secondary" @click="joinLatestGame()"> Join most recent game </v-btn>
+
     </v-app-bar>
 
     <v-main>
@@ -62,9 +57,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-        <v-btn @click="createGameDialog = true;"> New game </v-btn>
-        <v-btn @click="joinGameDialog = true;"> Join game </v-btn>
-        <v-btn @click="joinLatestGame()"> Join most recent game </v-btn>
       <ActiveGame :gameid="gameid"/>
     </v-main>
   </v-app>

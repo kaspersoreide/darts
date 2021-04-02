@@ -133,9 +133,9 @@ export default class ActiveGame extends Vue {
                 this.updateGameData();
             }
         }, 1000); 
-        this.initSpeech().catch(ex => {
-            console.log("ex",ex);
-        })
+        // this.initSpeech().catch(ex => {
+        //     console.log("ex",ex);
+        // })
     }
 
     async updateGameData() {

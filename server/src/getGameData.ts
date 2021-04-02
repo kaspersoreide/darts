@@ -1,5 +1,5 @@
 import middy from 'middy';
-import { cors } from 'middy/middlewares';
+import cors from '@middy/http-cors'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { getGamePlayers, getGameThrows } from './dbUtils';
 import { GameData, PlayerStat, Throw } from './interfaces';

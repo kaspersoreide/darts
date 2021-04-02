@@ -6,3 +6,5 @@ server/.serverless
 server/node_modules
 set_env.sh
 
+set_env_kasper.sh
+set_env_steinar.sh

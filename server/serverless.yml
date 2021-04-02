@@ -29,7 +29,7 @@ custom:
     payload: '1.0'
 
   s3Sync:
-    - bucketName: kasperdart
+    - bucketName: ${env:WEBSITE_BUCKET_NAME}
       localDir: ../clients/dart-client/dist
  
 functions:
@@ -69,6 +69,20 @@ functions:
       - httpApi:
           path: /getLatestGame
           method: get
+  connect:
+    handler: src/websocket/socket.socket
+    events:
+        - websocket:
+            route: $connect
+  disconnect:
+    handler: src/websocket/socket.socket
+    events:
+      - websocket:
+          route: $disconnect
+  default:
+    handler: src/websocket/socket.socket
+    events:
+      - websocket: $default
 
 resources:
   Resources:
@@ -76,7 +90,7 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         AccessControl: PublicRead
-        BucketName: kasperdart
+        BucketName: ${env:WEBSITE_BUCKET_NAME}
         WebsiteConfiguration:
           IndexDocument: index.html
     usersTable:
